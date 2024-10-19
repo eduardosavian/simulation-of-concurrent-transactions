@@ -1,9 +1,42 @@
 package main
 
-import(
+import (
 	"fmt"
+	"sync"
+	"time"
 )
 
+type Person struct {
+	name string
+	age  uint64
+}
+
+func PrintPerson(person Person, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	time.Sleep(time.Duration(person.age) * 10 * time.Millisecond)
+	fmt.Printf("Person name: %s, Person age: %d\n", person.name, person.age)
+}
+
+// Simulation of Concurrent Transactions:
+// Use threads to simulate transactions that attempt to access two resources shared: data items X and Y.
+func Ex1(persons []Person) {
+	var wg sync.WaitGroup
+
+	for _, person := range persons {
+		wg.Add(1)
+		go PrintPerson(person, &wg)
+	}
+
+	wg.Wait()
+}
+
 func main() {
-	fmt.Print("Hello")
+	persons := []Person{
+		{name: "Eduardo Savian", age: 100},
+		{name: "Henrique Zimmermann", age: 1},
+		{name: "Steff Tousant", age: 50},
+	}
+
+	Ex1(persons)
 }
