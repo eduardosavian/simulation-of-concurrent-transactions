@@ -31,6 +31,19 @@ func Ex1(persons []Person) {
 	wg.Wait()
 }
 
+// Access Control to Shared Resources:
+// Use a mutex-like structure (binary lock) to control exclusive access to data items X and Y. Threads must attempt to obtain the lock to access these resources concurrently.
+func Ex2(persons []Person) {
+	var wg sync.WaitGroup
+
+	for _, person := range persons {
+		wg.Add(1)
+		go PrintPerson(person, &wg)
+	}
+
+	wg.Wait()
+}
+
 func main() {
 	persons := []Person{
 		{name: "Eduardo Savian", age: 100},
@@ -39,4 +52,5 @@ func main() {
 	}
 
 	Ex1(persons)
+	Ex2(persons)
 }
