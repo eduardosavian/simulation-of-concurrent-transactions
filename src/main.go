@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+var mutex sync.Mutex
+
 type Person struct {
 	name string
 	age  uint64
@@ -15,6 +17,16 @@ func PrintPerson(person Person, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	time.Sleep(time.Duration(person.age) * 10 * time.Millisecond)
+	fmt.Printf("Person name: %s, Person age: %d\n", person.name, person.age)
+}
+
+func ChangePersonAge(person *Person, age uint64, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	mutex.Lock()
+ 	defer mutex.Unlock()
+
+	person.age = age
 	fmt.Printf("Person name: %s, Person age: %d\n", person.name, person.age)
 }
 
@@ -37,8 +49,9 @@ func Ex2(persons []Person) {
 	var wg sync.WaitGroup
 
 	for _, person := range persons {
-		wg.Add(1)
-		go PrintPerson(person, &wg)
+		wg.Add(2)
+		go ChangePersonAge(&person, 20, &wg)
+		go ChangePersonAge(&person, 20, &wg)
 	}
 
 	wg.Wait()
@@ -51,6 +64,6 @@ func main() {
 		{name: "Steff Tousant", age: 50},
 	}
 
-	Ex1(persons)
+	//Ex1(persons)
 	Ex2(persons)
 }
