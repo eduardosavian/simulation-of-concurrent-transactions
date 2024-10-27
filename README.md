@@ -14,7 +14,7 @@ go run src/main.go
 go build src/main.go
 ```
 
-## Execut
+## Execute
 
 ```bash
 ./main
