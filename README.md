@@ -2,6 +2,8 @@
 
 Developed by Eduardo Savian, Henrique Zimmerman and Steff Tousant
 
+[Vídeo](https://youtu.be/HQuE0bypw2Y)
+
 ## Run
 
 ```bash
